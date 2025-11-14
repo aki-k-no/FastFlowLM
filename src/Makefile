@@ -34,7 +34,7 @@ all:
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p $(OUT_DIR)
 	@cd $(BUILD_DIR) && cmake ..
-	@cd $(BUILD_DIR) && "cmake --build . --config Release
+	@cd $(BUILD_DIR) && cmake --build . --config Release
 
 run:
 	@cp lib/*.dll $(OUT_DIR)
