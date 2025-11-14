@@ -146,6 +146,8 @@ inline time_with_unit re_unit(time_with_unit time){
 namespace utils {
 
 inline void enable_ansi_on_windows_once() {
+    //this is only required on Windows
+    #ifdef _WIN32
     static bool done = false;
     if (done) return;
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -155,6 +157,7 @@ inline void enable_ansi_on_windows_once() {
     mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hOut, mode);
     done = true;
+    #endif
 }
 
 /// \brief get a random float

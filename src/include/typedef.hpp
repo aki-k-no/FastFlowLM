@@ -12,6 +12,8 @@
 #include <immintrin.h>
 #include <math.h>
 #include <codecvt>
+#include <iconv.h>
+#include <vector>
 #include "biovault_bfloat16.h"
 
 typedef float f32;
@@ -141,5 +143,25 @@ inline std::wstring utf8_to_wstring(const std::string& str) {
     std::wstring wstr(size_needed, 0);
     MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
     return wstr;
+}
+#endif
+#ifdef _IS_LINUX_
+inline std::wstring utf8_to_wstring(const std::string& str) {
+    // note that WideString is 32bit in Linux
+    iconv_t cd = iconv_open("WCHAR_T", "UTF-8");
+    size_t in_bytes = str.size();
+    char* in_buf = const_cast<char*>(str.data());
+
+    size_t out_bytes = (in_bytes + 1) * sizeof(wchar_t);
+    std::vector<char> out_buf(out_bytes);
+    char* out_ptr = out_buf.data();
+
+    size_t out_bytes_left = out_bytes;
+
+    iconv(cd, &in_buf, &in_bytes, &out_ptr, &out_bytes_left)
+    iconv_close(cd);
+
+    size_t used = out_bytes - out_bytes_left;
+    return std::wstring(reinterpret_cast<wchar_t*>(out_buf.data()), used / sizeof(wchar_t));
 }
 #endif
