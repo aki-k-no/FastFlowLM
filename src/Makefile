@@ -27,6 +27,29 @@ clean:
 	@$(PWSH) "Remove-Item -Recurse -Force '$(BUILD_DIR)'"
 	@$(PWSH) "Remove-Item -Recurse -Force '$(OUT_DIR)'"
 
+else ifeq ($(OS), Linux)
+
+
+all:
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(OUT_DIR)
+	@cd $(BUILD_DIR) && cmake ..
+	@cd $(BUILD_DIR) && "cmake --build . --config Release
+
+run:
+	@cp lib/*.dll $(OUT_DIR)
+	@cp model_list.json $(OUT_DIR)
+	@cd $(OUT_DIR) && ./flm.exe run gpt-oss -a 1
+
+serve:
+	@cp lib/*.dll $(OUT_DIR)
+	@cp model_list.json $(OUT_DIR)
+	@cd $(OUT_DIR) && ./flm.exe serve llama3.2:1b
+
+clean:
+	@rm -rf $(BUILD_DIR)
+	@rm -rf $(OUT_DIR)
+
 else
 
 all:
