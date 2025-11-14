@@ -157,7 +157,7 @@ inline std::wstring utf8_to_wstring(const std::string& str) {
 
     size_t out_bytes_left = out_bytes;
 
-    iconv(cd, &in_buf, &in_bytes, &out_ptr, &out_bytes_left)
+    iconv(cd, &in_buf, &in_bytes, &out_ptr, &out_bytes_left);
     iconv_close(cd);
 
     size_t used = out_bytes - out_bytes_left;
