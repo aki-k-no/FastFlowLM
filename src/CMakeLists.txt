@@ -23,8 +23,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 # ———————————————————————————————————————————————
 # User-tweakable XRT settings (override on cmake command-line)
 # ———————————————————————————————————————————————
-set(XRT_INCLUDE_DIR C:/dev/XRT/src/runtime_src/core/include CACHE PATH   "Where XRT headers live")
-set(XRT_LIB_DIR     C:/dev/xrtNPUfromDLL     CACHE PATH   "Where XRT libs live")
+if(WIN32)
+    set(XRT_INCLUDE_DIR "C:/dev/XRT/src/runtime_src/core/include" CACHE PATH "Where XRT headers live")
+    set(XRT_LIB_DIR     C:/dev/xrtNPUfromDLL     CACHE PATH   "Where XRT libs live")
+elseif(UNIX)
+    set(XRT_INCLUDE_DIR "/opt/xilinx/xrt/include" CACHE PATH "Where XRT headers live")
+    set(XRT_LIB_DIR     /opt/xilinx/xrt/lib     CACHE PATH   "Where XRT libs live")
+endif()
+
 
 
 

@@ -1,9 +1,12 @@
 BUILD_DIR := build
 OUT_DIR   := out
 PWSH      := powershell.exe
+UNAME_S   := $(shell uname -s)
 
+INCLUDE_DIR := $(shell dirname $(shell which xrt-smi))/../include
 
 .PHONY: all clean run serve
+
 
 ifeq ($(OS),Windows_NT)
 
@@ -27,14 +30,14 @@ clean:
 	@$(PWSH) "Remove-Item -Recurse -Force '$(BUILD_DIR)'"
 	@$(PWSH) "Remove-Item -Recurse -Force '$(OUT_DIR)'"
 
-else ifeq ($(OS), Linux)
-
+else ifeq ($(UNAME_S),Linux)
 
 all:
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p $(OUT_DIR)
 	@cd $(BUILD_DIR) && cmake ..
 	@cd $(BUILD_DIR) && cmake --build . --config Release
+
 
 run:
 	@cp lib/*.dll $(OUT_DIR)
